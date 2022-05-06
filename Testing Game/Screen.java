@@ -1,30 +1,98 @@
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
 
-import javax.swing.JPanel;
+import javax.swing.*;
 import javax.swing.Timer;
 
-public class Screen extends JPanel implements ActionListener, KeyListener {
+public class Screen extends JPanel implements ActionListener {
 
-  Timer t = new Timer(10, this);
+  // This timer is to call in the actionPerformed function below
+  Timer t = new Timer(0, this);
+
+  // Creation of the Player class
   Player p = new Player(350, 600, 10, 10, 0, 0);
-  int x = 0;
 
-  public Screen() {
-    addKeyListener(this);
+  // Constructor for the Screen Class
+  public Screen(JPanel contentPane) {
+
     setFocusable(true);
 
+    // Adding the keybinds for movement
+    addKeyBind(contentPane, "W", "Up", moveUp, stopUp);
+    addKeyBind(contentPane, "S", "Down", moveDown, stopDown);
+    addKeyBind(contentPane, "A", "Left", moveLeft, stopLeft);
+    addKeyBind(contentPane, "D", "Right", moveRight, stopRight);
+
+    // Starting the timer so that the game can detect input
     t.start();
 
+  }
+
+  // Functions for player movement ad also stopping the player when they stop holding a key
+  /* 
+  TODO: Figure out what's causing the player to "lag" a bit sometimes when they change 
+    directions after only holding down the opposite key for a short time. This doesn't happen
+    when the player has held the opposite direction for a long time (about a full second)
+  */
+  Action moveUp = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDy(-1);
+    }
+  };
+  Action stopUp = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDy(0);
+    }
+  };
+  Action moveDown = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDy(1);
+    }
+  };
+  Action stopDown = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDy(0);
+    }
+  };
+  Action moveLeft = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDx(-1);
+    }
+  };
+  Action stopLeft = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDx(0);
+    }
+  };
+  Action moveRight = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDx(1);
+    }
+  };
+  Action stopRight = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDx(0);
+    }
+  };
+
+  private void addKeyBind(JComponent contentPane, String key, String actionName, Action pressedAction,
+      Action releasedAction) {
+    InputMap iMap = contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
+    ActionMap aMap = contentPane.getActionMap();
+
+    String pressedName = actionName + " pressed";
+    String releasedName = actionName + " released";
+
+    iMap.put(KeyStroke.getKeyStroke(key), pressedName);
+    iMap.put(KeyStroke.getKeyStroke("released " + key), releasedName);
+    aMap.put(pressedName, pressedAction);
+    aMap.put(releasedName, releasedAction);
   }
 
   public void actionPerformed(ActionEvent e) {
 
     p.tick();
-
     repaint();
 
   }
@@ -33,61 +101,6 @@ public class Screen extends JPanel implements ActionListener, KeyListener {
     g.clearRect(0, 0, getWidth(), getHeight());
 
     p.draw(g);
-  }
-
-  public void keyTyped(KeyEvent k) {
-    switch (k.getKeyCode()) {
-      case KeyEvent.VK_K:
-        System.out.println("K");
-    }
-  }
-
-  @Override
-  public void keyPressed(KeyEvent k) {
-
-    switch (k.getKeyCode()) {
-
-      case KeyEvent.VK_W:
-        System.out.println("lfhskhfsd");
-        p.setDy(-1);
-        break;
-
-      case KeyEvent.VK_A:
-        p.setDx(-1);
-        break;
-
-      case KeyEvent.VK_S:
-        p.setDy(1);
-        break;
-
-      case KeyEvent.VK_D:
-        p.setDx(1);
-        break;
-
-    }
-
-  }
-
-  public void keyReleased(KeyEvent k) {
-    switch (k.getKeyCode()) {
-
-      case KeyEvent.VK_W:
-        p.setDy(0);
-        break;
-
-      case KeyEvent.VK_A:
-        p.setDx(0);
-        break;
-
-      case KeyEvent.VK_S:
-        p.setDy(0);
-        break;
-
-      case KeyEvent.VK_D:
-        p.setDx(0);
-        break;
-    }
-
   }
 
 }
