@@ -29,53 +29,69 @@ public class Screen extends JPanel implements ActionListener {
 
   }
 
-  // Functions for player movement ad also stopping the player when they stop holding a key
-  /* 
-  TODO: Figure out what's causing the player to "lag" a bit sometimes when they change 
-    directions after only holding down the opposite key for a short time. This doesn't happen
-    when the player has held the opposite direction for a long time (about a full second)
-  */
+  // Functions for player movement
+
+  // Boolean values are to check to see whether or not the player is moving in the opposite direction
+  // This is so that if they're changing direction, releasing the opposite key won't cause them to come to a stop
+  boolean up, down, left, right = false;
   Action moveUp = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDy(-1);
+      p.setDy(-4);
+      up = true;
     }
   };
   Action stopUp = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDy(0);
+      if (!down) {
+        p.setDy(0);
+      }
+      up = false;
     }
   };
   Action moveDown = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDy(1);
+      p.setDy(4);
+      down = true;
     }
   };
   Action stopDown = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDy(0);
+      if (!up) {
+        p.setDy(0);
+      }
+      down = false;
     }
   };
   Action moveLeft = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDx(-1);
+      p.setDx(-4);
+      left = true;
     }
   };
   Action stopLeft = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDx(0);
+      if (!right) {
+        p.setDx(0);
+      }
+      left = false;
     }
   };
   Action moveRight = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDx(1);
+      p.setDx(4);
+      right = true;
     }
   };
   Action stopRight = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDx(0);
+      if (!left) {
+        p.setDx(0);
+      }
+      right = false;
     }
   };
 
+  // Function for adding keybinds to whenever a key is held or released
   private void addKeyBind(JComponent contentPane, String key, String actionName, Action pressedAction,
       Action releasedAction) {
     InputMap iMap = contentPane.getInputMap(JComponent.WHEN_IN_FOCUSED_WINDOW);
@@ -90,13 +106,13 @@ public class Screen extends JPanel implements ActionListener {
     aMap.put(releasedName, releasedAction);
   }
 
+  // Function that updates the screen as the game goes on
   public void actionPerformed(ActionEvent e) {
-
     p.tick();
     repaint();
-
   }
 
+  // Removes and redraws the player and other objects to simulate movement
   public void paint(Graphics g) {
     g.clearRect(0, 0, getWidth(), getHeight());
 
