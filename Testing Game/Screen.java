@@ -12,6 +12,7 @@ public class Screen extends JPanel implements ActionListener {
 
   // Creation of the Player class
   Player p = new Player(350, 600, 10, 10, 0, 0);
+  PlayerBullet pb = new PlayerBullet(-1, -1, 2, 10, 0, 0);
 
   // Constructor for the Screen Class
   public Screen(JPanel contentPane) {
@@ -23,6 +24,11 @@ public class Screen extends JPanel implements ActionListener {
     addKeyBind(contentPane, "S", "Down", moveDown, stopDown);
     addKeyBind(contentPane, "A", "Left", moveLeft, stopLeft);
     addKeyBind(contentPane, "D", "Right", moveRight, stopRight);
+    // addKeyBind(contentPane, "shift W", "FocusUp", focusMoveUp, focusStopUp);
+    // addKeyBind(contentPane, "shift S", "FocusDown", focusMoveDown, focusStopDown);
+    // addKeyBind(contentPane, "shift A", "FocusLeft", focusMoveLeft, focusStopLeft);
+    // addKeyBind(contentPane, "shift D", "FocusRight", focusMoveRight, focusStopRight);
+    addKeyBind(contentPane, "SPACE", "Shoot", shootBullet, stopBullet);
 
     // Starting the timer so that the game can detect input
     t.start();
@@ -34,10 +40,17 @@ public class Screen extends JPanel implements ActionListener {
   // Boolean values are to check to see whether or not the player is moving in the opposite direction
   // This is so that if they're changing direction, releasing the opposite key won't cause them to come to a stop
   boolean up, down, left, right = false;
+  boolean focusUp, focusDown, focusLeft, focusRight = false;
   Action moveUp = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDy(-4);
+      p.setDy(-3);
       up = true;
+    }
+  };
+  Action focusMoveUp = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDy(-1);
+      focusUp = true;
     }
   };
   Action stopUp = new AbstractAction() {
@@ -48,9 +61,23 @@ public class Screen extends JPanel implements ActionListener {
       up = false;
     }
   };
+  Action focusStopUp = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      if (!focusDown) {
+        p.setDy(0);
+      }
+      focusUp = false;
+    }
+  };
   Action moveDown = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDy(4);
+      p.setDy(3);
+      down = true;
+    }
+  };
+  Action focusMoveDown = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDy(1);
       down = true;
     }
   };
@@ -62,10 +89,24 @@ public class Screen extends JPanel implements ActionListener {
       down = false;
     }
   };
+  Action focusStopDown = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      if (!focusUp) {
+        p.setDy(0);
+      }
+      focusDown = false;
+    }
+  };
   Action moveLeft = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDx(-4);
+      p.setDx(-3);
       left = true;
+    }
+  };
+  Action focusMoveLeft = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDx(-1);
+      up = true;
     }
   };
   Action stopLeft = new AbstractAction() {
@@ -76,9 +117,23 @@ public class Screen extends JPanel implements ActionListener {
       left = false;
     }
   };
+  Action focusStopLeft = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      if (!focusRight) {
+        p.setDx(0);
+      }
+      focusLeft = false;
+    }
+  };
   Action moveRight = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDx(4);
+      p.setDx(3);
+      right = true;
+    }
+  };
+  Action focusMoveRight = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      p.setDx(1);
       right = true;
     }
   };
@@ -88,6 +143,32 @@ public class Screen extends JPanel implements ActionListener {
         p.setDx(0);
       }
       right = false;
+    }
+  };
+  Action focusStopRight = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      if (!focusLeft) {
+        p.setDx(0);
+      }
+      focusRight = false;
+    }
+  };
+
+  //
+  boolean active = false;
+  Action shootBullet = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      System.out.println("Shoot");
+      if (!active) {
+        pb.create((int) p.getX() + 3, (int) p.getY());
+        pb.setDy(-10);
+        active = true;
+      }
+    }
+  };
+  Action stopBullet = new AbstractAction() {
+    public void actionPerformed(ActionEvent e) {
+      // Literally does nothing lmfao
     }
   };
 
@@ -100,15 +181,29 @@ public class Screen extends JPanel implements ActionListener {
     String pressedName = actionName + " pressed";
     String releasedName = actionName + " released";
 
-    iMap.put(KeyStroke.getKeyStroke(key), pressedName);
-    iMap.put(KeyStroke.getKeyStroke("released " + key), releasedName);
-    aMap.put(pressedName, pressedAction);
-    aMap.put(releasedName, releasedAction);
+    if (actionName.length() >= 6 && actionName.substring(0, 5).equals("Focus")) {
+      iMap.put(KeyStroke.getKeyStroke(key), pressedName);
+      iMap.put(KeyStroke.getKeyStroke("released " + key), releasedName);
+      iMap.put(KeyStroke.getKeyStroke("released shift"), releasedName);
+      aMap.put(pressedName, pressedAction);
+      aMap.put(releasedName, releasedAction);
+    } else {
+      iMap.put(KeyStroke.getKeyStroke(key), pressedName);
+      iMap.put(KeyStroke.getKeyStroke("released " + key), releasedName);
+      aMap.put(pressedName, pressedAction);
+      aMap.put(releasedName, releasedAction);
+    }
   }
 
   // Function that updates the screen as the game goes on
   public void actionPerformed(ActionEvent e) {
     p.tick();
+    pb.tick();
+    if (pb.getY() < -10) {
+      pb.setDy(0);
+      active = false;
+    }
+
     repaint();
   }
 
@@ -117,6 +212,7 @@ public class Screen extends JPanel implements ActionListener {
     g.clearRect(0, 0, getWidth(), getHeight());
 
     p.draw(g);
+    pb.draw(g);
   }
 
 }
