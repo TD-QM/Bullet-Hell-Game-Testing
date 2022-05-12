@@ -1,3 +1,4 @@
+import java.awt.*;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -8,11 +9,15 @@ import javax.swing.Timer;
 public class Screen extends JPanel implements ActionListener {
 
   // This timer is to call in the actionPerformed function below
-  Timer t = new Timer(0, this);
+  Timer t = new Timer(10, this);
 
   // Creation of the Player class
   Player p = new Player(350, 600, 10, 10, 0, 0);
-  PlayerBullet pb = new PlayerBullet(-1, -1, 2, 10, 0, 0);
+  PlayerBullet[] pbArr;
+  boolean[] activeBullet;
+  Enemy[] en;
+  Triangle test = new Triangle(300, 300, 310, 300, 305, 310);
+  // EnemyBullet[][] enb = new EnemyBullet[2][3];
 
   // Constructor for the Screen Class
   public Screen(JPanel contentPane) {
@@ -30,6 +35,31 @@ public class Screen extends JPanel implements ActionListener {
     // addKeyBind(contentPane, "shift D", "FocusRight", focusMoveRight, focusStopRight);
     addKeyBind(contentPane, "SPACE", "Shoot", shootBullet, stopBullet);
 
+    pbArr = new PlayerBullet[20];
+    activeBullet = new boolean[20];
+    for (int i = 0; i < 20; i++) {
+      pbArr[i] = new PlayerBullet(-1, -1, 2, 10, 0, 0);
+    }
+    for (int i = 0; i < 20; i++) {
+      activeBullet[i] = false;
+    }
+
+    en = new Enemy[20];
+    for (int i = 0; i < 20; i++) {
+      if (i < 5) {
+        en[i] = new Enemy(300, 200, 15, 15, 0, 0, Color.red);
+      } else if (i < 10) {
+        en[i] = new Enemy(300, 300, 15, 15, 0, 0, Color.orange);
+      } else if (i < 15) {
+        en[i] = new Enemy(300, 400, 15, 15, 0, 0, Color.yellow);
+      } else if (i < 20) {
+        en[i] = new Enemy(300, 500, 15, 15, 0, 0, Color.green);
+      }
+      en[i].spawn();
+    }
+
+    // EnemyBullet[][] enb = new EnemyBullet[20][10];
+
     // Starting the timer so that the game can detect input
     t.start();
 
@@ -40,19 +70,23 @@ public class Screen extends JPanel implements ActionListener {
   // Boolean values are to check to see whether or not the player is moving in the opposite direction
   // This is so that if they're changing direction, releasing the opposite key won't cause them to come to a stop
   boolean up, down, left, right = false;
-  boolean focusUp, focusDown, focusLeft, focusRight = false;
+  // boolean focusUp, focusDown, focusLeft, focusRight = false;
   Action moveUp = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDy(-3);
+      if (p.getX() <= 0) {
+        p.setY(0);
+      } else {
+        p.setDy(-3);
+      }
       up = true;
     }
   };
-  Action focusMoveUp = new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-      p.setDy(-1);
-      focusUp = true;
-    }
-  };
+  // Action focusMoveUp = new AbstractAction() {
+  //   public void actionPerformed(ActionEvent e) {
+  //     p.setDy(-1);
+  //     focusUp = true;
+  //   }
+  // };
   Action stopUp = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
       if (!down) {
@@ -61,26 +95,30 @@ public class Screen extends JPanel implements ActionListener {
       up = false;
     }
   };
-  Action focusStopUp = new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-      if (!focusDown) {
-        p.setDy(0);
-      }
-      focusUp = false;
-    }
-  };
+  // Action focusStopUp = new AbstractAction() {
+  //   public void actionPerformed(ActionEvent e) {
+  //     if (!focusDown) {
+  //       p.setDy(0);
+  //     }
+  //     focusUp = false;
+  //   }
+  // };
   Action moveDown = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDy(3);
+      if (p.getY() >= 690) {
+        p.setY(690);
+      } else {
+        p.setDy(3);
+      }
       down = true;
     }
   };
-  Action focusMoveDown = new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-      p.setDy(1);
-      down = true;
-    }
-  };
+  // Action focusMoveDown = new AbstractAction() {
+  //   public void actionPerformed(ActionEvent e) {
+  //     p.setDy(1);
+  //     down = true;
+  //   }
+  // };
   Action stopDown = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
       if (!up) {
@@ -89,26 +127,30 @@ public class Screen extends JPanel implements ActionListener {
       down = false;
     }
   };
-  Action focusStopDown = new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-      if (!focusUp) {
-        p.setDy(0);
-      }
-      focusDown = false;
-    }
-  };
+  // Action focusStopDown = new AbstractAction() {
+  //   public void actionPerformed(ActionEvent e) {
+  //     if (!focusUp) {
+  //       p.setDy(0);
+  //     }
+  //     focusDown = false;
+  //   }
+  // };
   Action moveLeft = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDx(-3);
+      if (p.getX() <= 0) {
+        p.setX(0);
+      } else {
+        p.setDx(-3);
+      }
       left = true;
     }
   };
-  Action focusMoveLeft = new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-      p.setDx(-1);
-      up = true;
-    }
-  };
+  // Action focusMoveLeft = new AbstractAction() {
+  //   public void actionPerformed(ActionEvent e) {
+  //     p.setDx(-1);
+  //     up = true;
+  //   }
+  // };
   Action stopLeft = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
       if (!right) {
@@ -117,26 +159,30 @@ public class Screen extends JPanel implements ActionListener {
       left = false;
     }
   };
-  Action focusStopLeft = new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-      if (!focusRight) {
-        p.setDx(0);
-      }
-      focusLeft = false;
-    }
-  };
+  // Action focusStopLeft = new AbstractAction() {
+  //   public void actionPerformed(ActionEvent e) {
+  //     if (!focusRight) {
+  //       p.setDx(0);
+  //     }
+  //     focusLeft = false;
+  //   }
+  // };
   Action moveRight = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      p.setDx(3);
+      if (p.getX() >= 690) {
+        p.setX(690);
+      } else {
+        p.setDx(3);
+      }
       right = true;
     }
   };
-  Action focusMoveRight = new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-      p.setDx(1);
-      right = true;
-    }
-  };
+  // Action focusMoveRight = new AbstractAction() {
+  //   public void actionPerformed(ActionEvent e) {
+  //     p.setDx(1);
+  //     right = true;
+  //   }
+  // };
   Action stopRight = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
       if (!left) {
@@ -145,24 +191,25 @@ public class Screen extends JPanel implements ActionListener {
       right = false;
     }
   };
-  Action focusStopRight = new AbstractAction() {
-    public void actionPerformed(ActionEvent e) {
-      if (!focusLeft) {
-        p.setDx(0);
-      }
-      focusRight = false;
-    }
-  };
+  // Action focusStopRight = new AbstractAction() {
+  //   public void actionPerformed(ActionEvent e) {
+  //     if (!focusLeft) {
+  //       p.setDx(0);
+  //     }
+  //     focusRight = false;
+  //   }
+  // };
 
-  //
-  boolean active = false;
   Action shootBullet = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
       System.out.println("Shoot");
-      if (!active) {
-        pb.create((int) p.getX() + 3, (int) p.getY());
-        pb.setDy(-10);
-        active = true;
+      for (int i = 0; i < 20; i++) {
+        if (!activeBullet[i]) {
+          pbArr[i].create((int) p.getX() + 4, (int) p.getY());
+          pbArr[i].setDy(-10);
+          activeBullet[i] = true;
+          break;
+        }
       }
     }
   };
@@ -180,28 +227,49 @@ public class Screen extends JPanel implements ActionListener {
 
     String pressedName = actionName + " pressed";
     String releasedName = actionName + " released";
+    iMap.put(KeyStroke.getKeyStroke(key), pressedName);
+    iMap.put(KeyStroke.getKeyStroke("released " + key), releasedName);
+    aMap.put(pressedName, pressedAction);
+    aMap.put(releasedName, releasedAction);
 
-    if (actionName.length() >= 6 && actionName.substring(0, 5).equals("Focus")) {
-      iMap.put(KeyStroke.getKeyStroke(key), pressedName);
-      iMap.put(KeyStroke.getKeyStroke("released " + key), releasedName);
-      iMap.put(KeyStroke.getKeyStroke("released shift"), releasedName);
-      aMap.put(pressedName, pressedAction);
-      aMap.put(releasedName, releasedAction);
-    } else {
-      iMap.put(KeyStroke.getKeyStroke(key), pressedName);
-      iMap.put(KeyStroke.getKeyStroke("released " + key), releasedName);
-      aMap.put(pressedName, pressedAction);
-      aMap.put(releasedName, releasedAction);
-    }
   }
 
   // Function that updates the screen as the game goes on
   public void actionPerformed(ActionEvent e) {
+
     p.tick();
-    pb.tick();
-    if (pb.getY() < -10) {
-      pb.setDy(0);
-      active = false;
+
+    for (int i = 0; i < 20; i++) {
+      pbArr[i].tick();
+      if (pbArr[i].getY() <= -10) {
+        pbArr[i].setDy(0);
+        activeBullet[i] = false;
+      }
+    }
+
+    for (int i = 0; i < 20; i++) {
+      for (int j = 0; j < 20; j++) {
+        if ((pbArr[j].getX() >= en[i].getX()
+              || pbArr[j].getX() + 3 >= en[i].getX())
+            &&
+            (pbArr[j].getX() <= en[i].getX() + en[i].getWidth()
+              || pbArr[j].getX() + 3 <= en[i].getX() + en[i].getWidth())
+            &&
+            (pbArr[j].getY() >= en[i].getY()
+              || pbArr[j].getY() + 10 >= en[i].getY())
+            &&
+            (pbArr[j].getY() <= en[i].getY() + en[i].getHeight()
+              || pbArr[j].getY() + 10 <= en[i].getY() + en[i].getHeight())) {
+          en[i].die();
+          pbArr[j].setY(-10);
+          activeBullet[j] = false;
+          System.out.println("Hit");
+          break;
+        }
+      }
+      if (en[i].aliveCheck()) {
+        en[i].tick();
+      }
     }
 
     repaint();
@@ -209,10 +277,26 @@ public class Screen extends JPanel implements ActionListener {
 
   // Removes and redraws the player and other objects to simulate movement
   public void paint(Graphics g) {
+
     g.clearRect(0, 0, getWidth(), getHeight());
 
+    g.setColor(Color.black);
     p.draw(g);
-    pb.draw(g);
+
+    test.fill(g, Color.red);
+
+    g.setColor(Color.blue);
+    for (int i = 0; i < 20; i++) {
+      pbArr[i].draw(g);
+    }
+
+    g.setColor(Color.red);
+    for (int i = 0; i < 20; i++) {
+      if (en[i].aliveCheck()) {
+        en[i].draw(g);
+      }
+    }
+
   }
 
 }
