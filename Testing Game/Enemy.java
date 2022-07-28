@@ -18,6 +18,12 @@ public class Enemy extends Triangle {
   }
 
   public void tick() {
+    if ((x <= 0) || ((x + width * 2) >= 700)) {
+      dx = -dx;
+    }
+    if ((y <= 0) || ((y + height * 2) >= 700)) {
+      dy = -dy;
+    }
     x += dx;
     y += dy;
     super.setPointA(x, y);
