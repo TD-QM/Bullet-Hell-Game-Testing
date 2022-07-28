@@ -16,7 +16,7 @@ public class Screen extends JPanel implements ActionListener {
   PlayerBullet[] pbArr;
   boolean[] activeBullet;
   Enemy[] en;
-  Triangle test = new Triangle(300, 300, 310, 300, 305, 310);
+  // Triangle test = new Triangle(300, 300, 310, 300, 305, 310);
   // EnemyBullet[][] enb = new EnemyBullet[2][3];
 
   // Constructor for the Screen Class
@@ -44,16 +44,16 @@ public class Screen extends JPanel implements ActionListener {
       activeBullet[i] = false;
     }
 
-    en = new Enemy[20];
-    for (int i = 0; i < 20; i++) {
-      if (i < 5) {
-        en[i] = new Enemy(300, 200, 15, 15, 0, 0, Color.red);
-      } else if (i < 10) {
-        en[i] = new Enemy(300, 300, 15, 15, 0, 0, Color.orange);
-      } else if (i < 15) {
-        en[i] = new Enemy(300, 400, 15, 15, 0, 0, Color.yellow);
-      } else if (i < 20) {
-        en[i] = new Enemy(300, 500, 15, 15, 0, 0, Color.green);
+    en = new Enemy[4];
+    for (int i = 0; i < 4; i++) {
+      if (i < 1) {
+        en[i] = new Enemy(300, 200, 15, 15, 5, 0, Color.red);
+      } else if (i < 2) {
+        en[i] = new Enemy(300, 300, 15, 15, 4, 0, Color.orange);
+      } else if (i < 3) {
+        en[i] = new Enemy(300, 400, 15, 15, 3, 0, Color.yellow);
+      } else if (i < 4) {
+        en[i] = new Enemy(300, 500, 15, 15, 2, 0, Color.green);
       }
       en[i].spawn();
     }
@@ -247,19 +247,21 @@ public class Screen extends JPanel implements ActionListener {
       }
     }
 
-    for (int i = 0; i < 20; i++) {
-      for (int j = 0; j < 20; j++) {
-        if ((pbArr[j].getX() >= en[i].getX()
-              || pbArr[j].getX() + 3 >= en[i].getX())
+    for (int i = 0; i < en.length; i++) {
+      for (int j = 0; j < en.length; j++) {
+        if ((en[i].aliveCheck() == true)
+            &&
+            (pbArr[j].getX() >= en[i].getX()
+                || pbArr[j].getX() + 3 >= en[i].getX())
             &&
             (pbArr[j].getX() <= en[i].getX() + en[i].getWidth()
-              || pbArr[j].getX() + 3 <= en[i].getX() + en[i].getWidth())
+                || pbArr[j].getX() + 3 <= en[i].getX() + en[i].getWidth())
             &&
             (pbArr[j].getY() >= en[i].getY()
-              || pbArr[j].getY() + 10 >= en[i].getY())
+                || pbArr[j].getY() + 10 >= en[i].getY())
             &&
             (pbArr[j].getY() <= en[i].getY() + en[i].getHeight()
-              || pbArr[j].getY() + 10 <= en[i].getY() + en[i].getHeight())) {
+                || pbArr[j].getY() + 10 <= en[i].getY() + en[i].getHeight())) {
           en[i].die();
           pbArr[j].setY(-10);
           activeBullet[j] = false;
@@ -283,7 +285,7 @@ public class Screen extends JPanel implements ActionListener {
     g.setColor(Color.black);
     p.draw(g);
 
-    test.fill(g, Color.red);
+    // test.fill(g, Color.red);
 
     g.setColor(Color.blue);
     for (int i = 0; i < 20; i++) {
@@ -291,7 +293,7 @@ public class Screen extends JPanel implements ActionListener {
     }
 
     g.setColor(Color.red);
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < en.length; i++) {
       if (en[i].aliveCheck()) {
         en[i].draw(g);
       }
