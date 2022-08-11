@@ -7,9 +7,11 @@ public class Game extends JFrame {
     Game game = new Game();
     game.setVisible(true);
 
-    game.init();
+    game.init(contentPane);
 
   }
+
+  static JPanel contentPane = new JPanel();
 
   public Game() {
     setTitle("Test");
@@ -17,7 +19,6 @@ public class Game extends JFrame {
     setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     setBounds(0, 0, 700, 700);
 
-    JPanel contentPane = new JPanel();
     contentPane.setBackground(new Color(255, 255, 255));
     contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
     contentPane.setLayout(null);
@@ -25,12 +26,12 @@ public class Game extends JFrame {
     setContentPane(contentPane);
   }
 
-  public void init() {
+  public void init(JPanel contentPane) {
     setLocationRelativeTo(null);
 
     setLayout(new GridLayout(1, 1, 0, 0));
 
-    Screen s = new Screen();
+    Screen s = new Screen(contentPane);
 
     add(s);
 
