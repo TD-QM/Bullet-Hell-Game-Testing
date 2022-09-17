@@ -18,7 +18,7 @@ public class Screen extends JPanel implements ActionListener {
   Timer t = new Timer(10, this);
 
   // Creation of the Player class
-  Player p = new Player(350, 600, 10, 10, 0, 0);
+  Player p = new Player(350, 600, 12, 12, 0, 0);
   PlayerBullet[] pbArr;
   Enemy[] en;
   // Triangle test = new Triangle(300, 300, 310, 300, 305, 310);

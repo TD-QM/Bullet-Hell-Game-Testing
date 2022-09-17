@@ -17,6 +17,9 @@ public class Player extends Rectangle {
 
   public void draw(Graphics g) {
     g.fillRect(x, y, width, height);
+
+    g.setColor(Color.white);
+    g.fillRect(x + width/4, y + height/4, width/2, height/2);
   }
 
   public void setDx(int dx) {
