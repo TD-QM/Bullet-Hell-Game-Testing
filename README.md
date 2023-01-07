@@ -2,10 +2,14 @@
 Testing for a game. May complete it, may not. Depends on how much time I have during the school year. 
 
 HOW TO COMPILE:
- - javac *.java
- 
+```console
+javac *.java
+```
+
 HOW TO RUN:
- - java Game.java
+```console
+java Game.java
+```
 
 HOW TO PLAY:
  - Movement controls are W, A, S, D for Up, Left, Down, Right respectively
