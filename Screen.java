@@ -54,25 +54,34 @@ public class Screen extends JPanel implements ActionListener {
     }
 
     // Making an array for the enemies
-    en = new Enemy[50];
+    en = new Enemy[5];
     
+    // Dummy enemies for testing
+
+    en[0] = new DummyEnemy(479, 50, 15, 15, 4, Color.green);
+    en[1] = new DummyEnemy(479, 100, 15, 15, 4, Color.green);
+    en[2] = new DummyEnemy(479, 150, 15, 15, 4, Color.green);
+    en[3] = new DummyEnemy(479, 200, 15, 15, 4, Color.green);
+    en[4] = new DummyEnemy(479, 250, 15, 15, 4, Color.green);
+
+
     // (int) ( (Math.random()*3) + 7 )
     // (int) ( (Math.random()*20) )
     // (int) ( (Math.random()*943) + 15 )
 
 
-    for(int i = 0; i < 50; i++){
-      if(i > 9){
-        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, -(int) ( (Math.random()*3) + 1), (int) ( (Math.random()*3) + 1), 4, Color.green);
-      } else if(i > 19){
-        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, (int) ( (Math.random()*3) + 1), -(int) ( (Math.random()*3) + 1), 4, Color.green);
-      } else if(i > 29){
-        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, -(int) ( (Math.random()*3) + 1), -(int) ( (Math.random()*3) + 1), 4, Color.green);
-      } else {
-        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, (int) ( (Math.random()*3) + 1), (int) ( (Math.random()*3) + 1), 4, Color.green);
-      }
+    // for(int i = 0; i < 50; i++){
+    //   if(i > 9){
+    //     en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, -(int) ( (Math.random()*3) + 1), (int) ( (Math.random()*3) + 1), 4, Color.green);
+    //   } else if(i > 19){
+    //     en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, (int) ( (Math.random()*3) + 1), -(int) ( (Math.random()*3) + 1), 4, Color.green);
+    //   } else if(i > 29){
+    //     en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, -(int) ( (Math.random()*3) + 1), -(int) ( (Math.random()*3) + 1), 4, Color.green);
+    //   } else {
+    //     en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, (int) ( (Math.random()*3) + 1), (int) ( (Math.random()*3) + 1), 4, Color.green);
+    //   }
       
-    }
+    // }
 
 
     // EnemyBullet[][] enb = new EnemyBullet[20][10];

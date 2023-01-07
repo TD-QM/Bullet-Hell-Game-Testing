@@ -2,9 +2,10 @@ import java.awt.*;
 
 public class Enemy{
 
-  private int x, y, width, height, dx, dy, hp;
-  private Color color;
-  private boolean alive;
+  protected int x, y, width, height, dx, dy;
+  protected int hp;
+  protected Color color;
+  protected boolean alive;
 
   public Enemy(int x, int y, int width, int height, int dx, int dy, int hp, Color color) {
     this.color = color;
