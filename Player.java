@@ -1,9 +1,20 @@
 import java.awt.*;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class Player extends Rectangle {
 
   private int dx, dy, hp;
-  private boolean alive;
+  private boolean alive, invincible;
+  private Color color;
+
+  Timer iFrameTimer = new Timer();
+  TimerTask iFrames = new TimerTask(){
+    public void run(){
+      invincible = false;
+      color = Color.black;
+    }
+  };
 
   public Player(int x, int y, int width, int height, int dx, int dy, int hp) {
     setBounds(x, y, width, height);
@@ -11,6 +22,7 @@ public class Player extends Rectangle {
     this.dy = dy;
     this.hp = hp;
     alive = true;
+    invincible = false;
   }
 
   public void tick() {
@@ -41,6 +53,8 @@ public class Player extends Rectangle {
   }
 
   public void draw(Graphics g) {
+
+    g.setColor(color);
     g.fillRect(x, y, width, height);
 
     g.setColor(Color.white);
@@ -64,11 +78,28 @@ public class Player extends Rectangle {
   }
 
   public boolean hit(){
-    hp--;
+    if(!invincible){
+      hp--;
+      invincible = true;
+      color = Color.lightGray;
+
+      iFrameTimer.schedule(iFrames, 3000);
+      iFrames = new TimerTask(){
+        public void run(){
+          invincible = false;
+        }
+      };
+      
+    }
+
     if(hp <= 0){
       alive = false;
     }
     return alive;
+  }
+
+  public boolean hasIFrames(){
+    return invincible;
   }
 
   public int getHP(){

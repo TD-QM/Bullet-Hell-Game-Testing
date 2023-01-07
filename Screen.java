@@ -54,15 +54,14 @@ public class Screen extends JPanel implements ActionListener {
     }
 
     // Making an array for the enemies
-    en = new Enemy[5];
+    en = new Enemy[50];
     
     // Dummy enemies for testing
-
-    en[0] = new DummyEnemy(479, 50, 15, 15, 4, Color.green);
-    en[1] = new DummyEnemy(479, 100, 15, 15, 4, Color.green);
-    en[2] = new DummyEnemy(479, 150, 15, 15, 4, Color.green);
-    en[3] = new DummyEnemy(479, 200, 15, 15, 4, Color.green);
-    en[4] = new DummyEnemy(479, 250, 15, 15, 4, Color.green);
+    // en[0] = new DummyEnemy(479, 50, 15, 15, 4, Color.green);
+    // en[1] = new DummyEnemy(479, 100, 15, 15, 4, Color.green);
+    // en[2] = new DummyEnemy(479, 150, 15, 15, 4, Color.green);
+    // en[3] = new DummyEnemy(479, 200, 15, 15, 4, Color.green);
+    // en[4] = new DummyEnemy(479, 250, 15, 15, 4, Color.green);
 
 
     // (int) ( (Math.random()*3) + 7 )
@@ -70,21 +69,22 @@ public class Screen extends JPanel implements ActionListener {
     // (int) ( (Math.random()*943) + 15 )
 
 
-    // for(int i = 0; i < 50; i++){
-    //   if(i > 9){
-    //     en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, -(int) ( (Math.random()*3) + 1), (int) ( (Math.random()*3) + 1), 4, Color.green);
-    //   } else if(i > 19){
-    //     en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, (int) ( (Math.random()*3) + 1), -(int) ( (Math.random()*3) + 1), 4, Color.green);
-    //   } else if(i > 29){
-    //     en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, -(int) ( (Math.random()*3) + 1), -(int) ( (Math.random()*3) + 1), 4, Color.green);
-    //   } else {
-    //     en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, (int) ( (Math.random()*3) + 1), (int) ( (Math.random()*3) + 1), 4, Color.green);
-    //   }
+    for(int i = 0; i < 50; i++){
       
-    // }
+      if(i > 9){
+        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, -(int) ( (Math.random()*3) + 1), (int) ( (Math.random()*3) + 1), 4, Color.green);
+      } else if(i > 19){
+        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, (int) ( (Math.random()*3) + 1), -(int) ( (Math.random()*3) + 1), 4, Color.green);
+      } else if(i > 29){
+        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, -(int) ( (Math.random()*3) + 1), -(int) ( (Math.random()*3) + 1), 4, Color.green);
+      } else {
+        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, (int) ( (Math.random()*3) + 1), (int) ( (Math.random()*3) + 1), 4, Color.green);
+      }
+      
+    }
 
 
-    // EnemyBullet[][] enb = new EnemyBullet[20][10];
+    // EnemyBullet[][] enb = new EnemyBullet[20][10]; Depricated bullet concept. May bring back in a new enemy type
 
     // Starting the timer so that the game can detect input
     timer.start();
@@ -328,7 +328,7 @@ public class Screen extends JPanel implements ActionListener {
           pbArr[j].deactivate();
 
           // This one is just for testing purposes to see if the enemy actually got hit or not
-          System.out.println("Hit");
+          // System.out.println("Hit");
 
           // Break out of the check for bullets
           break;
@@ -339,15 +339,17 @@ public class Screen extends JPanel implements ActionListener {
      * It's time for needlessly complicated and inefficient things part 2!
      */
     for (int j = 0; j < en.length; j++) {
-      if ((en[j].aliveCheck() == true) // Check to see if the enemy in the enemyArray is alive first of all. Shaves off some iterations
+      if (!p.hasIFrames()
           &&
-          p.getX() + 3 >= en[j].getX() + 2 // All of this other garbage is basically just checking if the bullet and the enemy overlap in the 2d space
+          en[j].aliveCheck() == true // Check to see if the enemy in the enemyArray is alive first of all. Shaves off some iterations
           &&
-          p.getX() + 9 <= en[j].getX() + 10
+          p.getX() + 9 >= en[j].getX() + 2 
           &&
-          p.getY() + 3 >= en[j].getY() + 2
+          p.getX() + 3 <= en[j].getX() + 10
           &&
-          p.getY() + 9 <= en[j].getY() + 10) {
+          p.getY() + 9 >= en[j].getY() + 2
+          &&
+          p.getY() + 3 <= en[j].getY() + 10) {
         
         
         // Hit the player
@@ -375,7 +377,6 @@ public class Screen extends JPanel implements ActionListener {
 
     g.clearRect(0, 0, getWidth(), getHeight());
 
-    g.setColor(Color.black);
     p.draw(g);
 
     g.setColor(Color.blue);
