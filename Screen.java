@@ -312,14 +312,14 @@ public class Screen extends JPanel implements ActionListener {
         if ((en[i].aliveCheck() == true) // Check to see if the enemy in the enemyArray is alive first of all. Shaves off some iterations
             &&
             pbArr[j].activeCheck() // Check to see if the bullet is active or not. Also helps to shave off some iterations
+            && // All of this other garbage is basically just checking if the bullet and the enemy overlap in the 2d space
+            pbArr[j].getX() + 3 >= en[i].getX() 
             &&
-            pbArr[j].getX() >= en[i].getX() // All of this other garbage is basically just checking if the bullet and the enemy overlap in the 2d space
+            pbArr[j].getX() <= en[i].getX() + en[i].getWidth() 
             &&
-            pbArr[j].getX() + 3 <= en[i].getX() + en[i].getWidth()
+            pbArr[j].getY() + 10>= en[i].getY()
             &&
-            pbArr[j].getY() >= en[i].getY()
-            &&
-            pbArr[j].getY() + 10 <= en[i].getY() + en[i].getHeight()) {
+            pbArr[j].getY() <= en[i].getY() + en[i].getHeight()) {
           
           // If all of these horrid checks pass, then hit the enemy
           en[i].hit(); 
