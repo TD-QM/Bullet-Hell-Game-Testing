@@ -48,7 +48,7 @@ public class Screen extends JPanel implements ActionListener {
     addKeyBind(contentPane, "SPACE", "Shoot", shootBullet, stopBullet);
 
     // Making an array for the player's bullets
-    pbArr = new PlayerBullet[5];
+    pbArr = new PlayerBullet[7];
     for (int i = 0; i < pbArr.length; i++) {
       pbArr[i] = new PlayerBullet(-1, -1, 2, 10, 0, 0, false);
     }
@@ -346,8 +346,6 @@ public class Screen extends JPanel implements ActionListener {
     g.setColor(Color.black);
     p.draw(g);
 
-    // test.fill(g, Color.red);
-
     g.setColor(Color.blue);
     for (int i = 0; i < pbArr.length; i++) {
       if (pbArr[i].activeCheck()){
@@ -355,7 +353,6 @@ public class Screen extends JPanel implements ActionListener {
       }
     }
 
-    g.setColor(Color.red);
     for (int i = 0; i < en.length; i++) {
       if (en[i].aliveCheck()) {
         en[i].draw(g);

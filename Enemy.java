@@ -1,13 +1,12 @@
 import java.awt.*;
 
-public class Enemy extends Triangle {
+public class Enemy{
 
   private int x, y, width, height, dx, dy, hp;
   private Color color;
   private boolean alive;
 
   public Enemy(int x, int y, int width, int height, int dx, int dy, int hp, Color color) {
-    super(x, y, x + width, y, x + width / 2, y + height);
     this.color = color;
     this.x = x;
     this.y = y;
@@ -30,16 +29,11 @@ public class Enemy extends Triangle {
 
     x += dx;
     y += dy;
-
-    // Updating their position accoriding to the dx and dy values
-    super.setPointA(x, y);
-    super.setPointB(x + width, y);
-    super.setPointC(x + width / 2, y + height);
   }
 
   public void draw(Graphics g) {
-    super.fill(g, color);
-    // super.sketch(g);
+    g.setColor(color);
+    g.fillOval(x, y, width, height);
   }
 
   public void setDx(int dx) {
