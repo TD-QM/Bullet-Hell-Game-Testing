@@ -2,20 +2,15 @@
 Testing for a game. May complete it, may not. Depends on how much time I have during the school year. 
 
 HOW TO COMPILE:
-
-javac *.java
-
-
+ - javac *.java
+ 
 HOW TO RUN:
-
-java Game.java
-
+ - java Game.java
 
 HOW TO PLAY:
-
-Movement controls are W, A, S, D for Up, Left, Down, Right respectively
-Shooting contols are Space to shoot
-    Only 5 bullets can be active at a time
+ - Movement controls are W, A, S, D for Up, Left, Down, Right respectively
+ - Shooting contols are Space to shoot
+    - Only 5 bullets can be active at a time
 
 
 TODO:
