@@ -1,0 +1,3 @@
+*.class
+.vscode
+Testing Game/Enemy.class
