@@ -27,8 +27,8 @@ public class Triangle {
   // constructor taking 4 integer arguments
   public Triangle(int x, int y, int w, int h) {
     pointA = new Point(x, y);
-    pointB = new Point(x + w, y - h / 2);
-    pointC = new Point(x + w, y + h / 2);
+    pointB = new Point(x + w, y);
+    pointC = new Point(x + w/2, y + h);
   }
 
   // set the Points

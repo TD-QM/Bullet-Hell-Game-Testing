@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.Graphics;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.lang.Math;
 
 /*
  * These are to update the screen that the player sees
@@ -15,10 +16,10 @@ import javax.swing.Timer;
 public class Screen extends JPanel implements ActionListener {
 
   // This timer is to call in the actionPerformed function below
-  Timer t = new Timer(10, this);
+  Timer timer = new Timer(10, this);
 
   // Creation of the Player class
-  Player p = new Player(350, 600, 12, 12, 0, 0);
+  Player p = new Player(480, 600, 12, 12, 0, 0);
   PlayerBullet[] pbArr;
   Enemy[] en;
   // Triangle test = new Triangle(300, 300, 310, 300, 305, 310);
@@ -47,30 +48,37 @@ public class Screen extends JPanel implements ActionListener {
     addKeyBind(contentPane, "SPACE", "Shoot", shootBullet, stopBullet);
 
     // Making an array for the player's bullets
-    pbArr = new PlayerBullet[20];
-    for (int i = 0; i < 20; i++) {
+    pbArr = new PlayerBullet[5];
+    for (int i = 0; i < pbArr.length; i++) {
       pbArr[i] = new PlayerBullet(-1, -1, 2, 10, 0, 0, false);
     }
 
-    // Making an array for the enemies as well as spawning them into the world (Setting their alive state to true)
-    en = new Enemy[4];
-    for (int i = 0; i < 4; i++) {
-      if (i < 1) {
-        en[i] = new Enemy(300, 200, 15, 15, 5, 0, Color.red);
-      } else if (i < 2) {
-        en[i] = new Enemy(300, 300, 15, 15, 4, 0, Color.orange);
-      } else if (i < 3) {
-        en[i] = new Enemy(300, 400, 15, 15, 3, 0, Color.yellow);
-      } else if (i < 4) {
-        en[i] = new Enemy(300, 500, 15, 15, 2, 0, Color.green);
+    // Making an array for the enemies
+    en = new Enemy[50];
+    
+    // (int) ( (Math.random()*3) + 7 )
+    // (int) ( (Math.random()*20) )
+    // (int) ( (Math.random()*943) + 15 )
+
+
+    for(int i = 0; i < 50; i++){
+      if(i > 9){
+        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, -(int) ( (Math.random()*3) + 1), (int) ( (Math.random()*3) + 1), 4, Color.green);
+      } else if(i > 19){
+        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, (int) ( (Math.random()*3) + 1), -(int) ( (Math.random()*3) + 1), 4, Color.green);
+      } else if(i > 29){
+        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, -(int) ( (Math.random()*3) + 1), -(int) ( (Math.random()*3) + 1), 4, Color.green);
+      } else {
+        en[i] = new Enemy( (int) ( (Math.random()*943) + 15), (int) ( (Math.random()*200) ), 15, 15, (int) ( (Math.random()*3) + 1), (int) ( (Math.random()*3) + 1), 4, Color.green);
       }
-      en[i].spawn();
+      
     }
+
 
     // EnemyBullet[][] enb = new EnemyBullet[20][10];
 
     // Starting the timer so that the game can detect input
-    t.start();
+    timer.start();
 
   }
 
@@ -91,7 +99,7 @@ public class Screen extends JPanel implements ActionListener {
 
       // Code for if the player is at the very top of the screen
       if (p.getY() <= 0) {
-        p.setY(0); // Sets dy to zero, so they can't move
+        p.setDy(0); // Sets dy to zero, so they can't move
       } else {        
         p.setDy(-3); // If they're not at the top of the screen, then they move up
       }
@@ -130,8 +138,8 @@ public class Screen extends JPanel implements ActionListener {
 
   Action moveDown = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      if (p.getY() >= 690) {
-        p.setY(690);
+      if (p.getY() >= 633) {
+        p.setDy(0);
       } else {
         p.setDy(3);
       }
@@ -165,7 +173,7 @@ public class Screen extends JPanel implements ActionListener {
   Action moveLeft = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
       if (p.getX() <= 0) {
-        p.setX(0);
+        p.setDx(0);
       } else {
         p.setDx(-3);
       }
@@ -198,8 +206,8 @@ public class Screen extends JPanel implements ActionListener {
 
   Action moveRight = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      if (p.getX() >= 690) {
-        p.setX(690);
+      if (p.getX() >= 961) {
+        p.setDx(0);
       } else {
         p.setDx(3);
       }
@@ -232,8 +240,7 @@ public class Screen extends JPanel implements ActionListener {
 
   Action shootBullet = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
-      System.out.println("Shoot");
-      for (int i = 0; i < 20; i++) {
+      for (int i = 0; i < pbArr.length; i++) {
         if (!pbArr[i].activeCheck()) {
           pbArr[i].create((int) p.getX() + 4, (int) p.getY());
           pbArr[i].setDy(-10);
@@ -309,8 +316,8 @@ public class Screen extends JPanel implements ActionListener {
             (pbArr[j].getY() <= en[i].getY() + en[i].getHeight()
                 || pbArr[j].getY() + 10 <= en[i].getY() + en[i].getHeight())) {
           
-          // If all of these horrid checks pass, then kill the enemy
-          en[i].die(); 
+          // If all of these horrid checks pass, then hit the enemy
+          en[i].hit(); 
 
           // Deactivate the bullet
           pbArr[j].deactivate();
@@ -342,7 +349,7 @@ public class Screen extends JPanel implements ActionListener {
     // test.fill(g, Color.red);
 
     g.setColor(Color.blue);
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < pbArr.length; i++) {
       if (pbArr[i].activeCheck()){
         pbArr[i].draw(g);
       }

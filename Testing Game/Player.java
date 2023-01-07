@@ -11,8 +11,30 @@ public class Player extends Rectangle {
   }
 
   public void tick() {
-    this.x += dx;
-    this.y += dy;
+
+    // Updating the position of the player
+    
+    // Checking to see if the player is within the bounds of the game
+    // If they're not, then set them to be
+    if(x > 961){
+      x = 961;
+    } else if(x < 0){
+      x = 0;
+    } else {
+      x += dx;
+    }
+
+    if(y > 633){
+      y = 633;
+    } else if(y < 0){
+      y = 0;
+    } else {
+      y += dy;
+    }
+
+    System.out.println("X: " + x);
+    System.out.println("Y: " + y);
+
   }
 
   public void draw(Graphics g) {

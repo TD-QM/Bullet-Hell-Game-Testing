@@ -2,11 +2,11 @@ import java.awt.*;
 
 public class Enemy extends Triangle {
 
-  private int x, y, width, height, dx, dy;
+  private int x, y, width, height, dx, dy, hp;
   private Color color;
   private boolean alive;
 
-  public Enemy(int x, int y, int width, int height, int dx, int dy, Color color) {
+  public Enemy(int x, int y, int width, int height, int dx, int dy, int hp, Color color) {
     super(x, y, x + width, y, x + width / 2, y + height);
     this.color = color;
     this.x = x;
@@ -15,17 +15,23 @@ public class Enemy extends Triangle {
     this.height = height;
     this.dx = dx;
     this.dy = dy;
+    this.hp = hp;
+    alive = true;
   }
 
   public void tick() {
-    if ((x <= 0) || ((x + width * 2) >= 700)) {
+    // This is to just make the enemy bounce off the walls if they reach the edge
+    if ((x <= 0) || ((x + width) >= 958)) {
       dx = -dx;
     }
-    if ((y <= 0) || ((y + height * 2) >= 700)) {
+    if ((y <= 0) || ((y + height) >= 645)) {
       dy = -dy;
     }
+
     x += dx;
     y += dy;
+
+    // Updating their position accoriding to the dx and dy values
     super.setPointA(x, y);
     super.setPointB(x + width, y);
     super.setPointC(x + width / 2, y + height);
@@ -62,6 +68,60 @@ public class Enemy extends Triangle {
 
   public void spawn() {
     alive = true;
+  }
+
+  public void hit(){
+    hp--;
+
+    if (hp <= 0){
+      die();
+
+    } else if(hp <= 1){ // Every time the enemy is hit, change its color and make it faster
+
+      if(dx > 0){
+        dx += 1;
+      } else {
+        dx -= 1;
+      }
+      if(dy > 0){
+        dy += 1;
+      } else {
+        dy -= 1;
+      }
+
+      color = Color.red;
+
+    } else if(hp <= 2){
+
+      if(dx > 0){
+        dx += 1;
+      } else {
+        dx -= 1;
+      }
+      if(dy > 0){
+        dy += 1;
+      } else {
+        dy -= 1;
+      }
+
+      color = Color.orange;
+
+    } else if(hp <= 3){
+
+      if(dx > 0){
+        dx += 1;
+      } else {
+        dx -= 1;
+      }
+      if(dy > 0){
+        dy += 1;
+      } else {
+        dy -= 1;
+      }
+
+      color = Color.yellow;
+
+    }
   }
 
   public void die() {
