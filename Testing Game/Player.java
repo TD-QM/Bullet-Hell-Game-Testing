@@ -32,8 +32,8 @@ public class Player extends Rectangle {
       y += dy;
     }
 
-    System.out.println("X: " + x);
-    System.out.println("Y: " + y);
+    // System.out.println("X: " + x);
+    // System.out.println("Y: " + y);
 
   }
 
