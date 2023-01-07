@@ -19,7 +19,7 @@ public class Screen extends JPanel implements ActionListener {
   Timer timer = new Timer(10, this);
 
   // Creation of the Player class
-  Player p = new Player(480, 600, 12, 12, 0, 0);
+  Player p = new Player(480, 600, 12, 12, 0, 0, 10);
   PlayerBullet[] pbArr;
   Enemy[] en;
   // Triangle test = new Triangle(300, 300, 310, 300, 305, 310);
@@ -302,19 +302,15 @@ public class Screen extends JPanel implements ActionListener {
       for (int j = 0; j < pbArr.length; j++) {
         if ((en[i].aliveCheck() == true) // Check to see if the enemy in the enemyArray is alive first of all. Shaves off some iterations
             &&
-            (pbArr[j].activeCheck()) // Check to see if the bullet is active or not. Also helps to shave off some iterations
+            pbArr[j].activeCheck() // Check to see if the bullet is active or not. Also helps to shave off some iterations
             &&
-            (pbArr[j].getX() >= en[i].getX() // All of this other garbage is basically just checking if the bullet and the enemy overlap in the 2d space
-                || pbArr[j].getX() + 3 >= en[i].getX())
+            pbArr[j].getX() >= en[i].getX() // All of this other garbage is basically just checking if the bullet and the enemy overlap in the 2d space
             &&
-            (pbArr[j].getX() <= en[i].getX() + en[i].getWidth()
-                || pbArr[j].getX() + 3 <= en[i].getX() + en[i].getWidth())
+            pbArr[j].getX() + 3 <= en[i].getX() + en[i].getWidth()
             &&
-            (pbArr[j].getY() >= en[i].getY()
-                || pbArr[j].getY() + 10 >= en[i].getY())
+            pbArr[j].getY() >= en[i].getY()
             &&
-            (pbArr[j].getY() <= en[i].getY() + en[i].getHeight()
-                || pbArr[j].getY() + 10 <= en[i].getY() + en[i].getHeight())) {
+            pbArr[j].getY() + 10 <= en[i].getY() + en[i].getHeight()) {
           
           // If all of these horrid checks pass, then hit the enemy
           en[i].hit(); 
@@ -329,6 +325,33 @@ public class Screen extends JPanel implements ActionListener {
           break;
         }
       }
+
+    /*
+     * It's time for needlessly complicated and inefficient things part 2!
+     */
+    for (int j = 0; j < en.length; j++) {
+      if ((en[j].aliveCheck() == true) // Check to see if the enemy in the enemyArray is alive first of all. Shaves off some iterations
+          &&
+          p.getX() + 3 >= en[j].getX() + 2 // All of this other garbage is basically just checking if the bullet and the enemy overlap in the 2d space
+          &&
+          p.getX() + 9 <= en[j].getX() + 10
+          &&
+          p.getY() + 3 >= en[j].getY() + 2
+          &&
+          p.getY() + 9 <= en[j].getY() + 10) {
+        
+        
+        // Hit the player
+        p.hit();
+        
+        // This one is necessary to see if the player actually got hit or not. Also displays their hp on the terminal
+        System.out.println("Player Hit");
+        System.out.println("Player HP: " + p.getHP());
+
+        // Break out of the check
+        break;
+      }
+    }
 
       if (en[i].aliveCheck()) {
         en[i].tick();

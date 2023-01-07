@@ -2,12 +2,15 @@ import java.awt.*;
 
 public class Player extends Rectangle {
 
-  private int dx, dy;
+  private int dx, dy, hp;
+  private boolean alive;
 
-  public Player(int x, int y, int width, int height, int dx, int dy) {
+  public Player(int x, int y, int width, int height, int dx, int dy, int hp) {
     setBounds(x, y, width, height);
     this.dx = dx;
     this.dy = dy;
+    this.hp = hp;
+    alive = true;
   }
 
   public void tick() {
@@ -58,6 +61,18 @@ public class Player extends Rectangle {
 
   public void setY(int y) {
     this.y = y;
+  }
+
+  public boolean hit(){
+    hp--;
+    if(hp <= 0){
+      alive = false;
+    }
+    return alive;
+  }
+
+  public int getHP(){
+    return hp;
   }
 
 }
