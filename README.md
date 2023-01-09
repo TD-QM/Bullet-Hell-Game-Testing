@@ -22,7 +22,6 @@ TODO:
     - Currently health is displayed on the terminal
     - Maybe have a small box in the top left/right corner that displays the health
  - [WIP] Add collision between player and enemy
-    - 
  - If possible, try to make bullet (and soon player) collision more efficient
     - There are checks for the bullet collision every single frame of the game, which is obviously bad
     - Try to look into event handlers 
