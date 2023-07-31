@@ -2,7 +2,7 @@ import java.awt.*;
 import java.util.Timer;
 import java.util.TimerTask;
 
-public class Player extends Rectangle {
+public class Player extends Rectangle{
 
   private int dx, dy, hp;
   private boolean alive, invincible;
@@ -87,6 +87,7 @@ public class Player extends Rectangle {
       iFrames = new TimerTask(){
         public void run(){
           invincible = false;
+          color = Color.black;
         }
       };
       
