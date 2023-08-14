@@ -1,12 +1,12 @@
 import java.awt.*;
 
-public class PlayerBullet extends Rectangle {
+public class PlayerBullet extends GameObject {
 
   private int dx, dy;
   private boolean active;
 
   public PlayerBullet(int x, int y, int width, int height, int dx, int dy, boolean active) {
-    setBounds(x, y, width, height);
+    super(x, y, width, height);
     this.dx = dx;
     this.dy = dy;
     this.active = active;
@@ -34,7 +34,7 @@ public class PlayerBullet extends Rectangle {
     active = false;
   }
 
-  public boolean activeCheck(){
+  public boolean status(){
     return active;
   }
 

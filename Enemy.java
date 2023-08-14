@@ -1,6 +1,6 @@
 import java.awt.*;
 
-public class Enemy{
+public class Enemy extends GameObject{
 
   protected int x, y, width, height, dx, dy;
   protected int hp;
@@ -8,6 +8,7 @@ public class Enemy{
   protected boolean alive;
 
   public Enemy(int x, int y, int width, int height, int dx, int dy, int hp, Color color) {
+    super();
     this.color = color;
     this.x = x;
     this.y = y;
@@ -45,19 +46,19 @@ public class Enemy{
     this.dy = dy;
   }
 
-  public int getX() {
+  public double getX() {
     return x;
   }
 
-  public int getY() {
+  public double getY() {
     return y;
   }
 
-  public int getWidth() {
+  public double getWidth() {
     return width;
   }
 
-  public int getHeight() {
+  public double getHeight() {
     return height;
   }
 
@@ -123,7 +124,7 @@ public class Enemy{
     alive = false;
   }
 
-  public boolean aliveCheck() {
+  public boolean status() {
     return alive;
   }
 

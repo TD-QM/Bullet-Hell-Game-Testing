@@ -22,6 +22,10 @@ public class Screen extends JPanel implements ActionListener {
   Player p = new Player(480, 600, 12, 12, 0, 0, 10);
   PlayerBullet[] pbArr;
   Enemy[] en;
+
+  GameObjectLinkedList pbLinkedArr = new GameObjectLinkedList();
+  GameObjectLinkedList enLinkedArr = new GameObjectLinkedList();
+
   // Triangle test = new Triangle(300, 300, 310, 300, 305, 310);
   // EnemyBullet[][] enb = new EnemyBullet[2][3];
 
@@ -48,10 +52,14 @@ public class Screen extends JPanel implements ActionListener {
     addKeyBind(contentPane, "SPACE", "Shoot", shootBullet, stopBullet);
 
     // Making an array for the player's bullets
+    
     pbArr = new PlayerBullet[7];
     for (int i = 0; i < pbArr.length; i++) {
       pbArr[i] = new PlayerBullet(-1, -1, 2, 10, 0, 0, false);
     }
+    
+
+
 
     // Making an array for the enemies
     en = new Enemy[50];
@@ -250,7 +258,7 @@ public class Screen extends JPanel implements ActionListener {
   Action shootBullet = new AbstractAction() {
     public void actionPerformed(ActionEvent e) {
       for (int i = 0; i < pbArr.length; i++) {
-        if (!pbArr[i].activeCheck()) {
+        if (!pbArr[i].status()) {
           pbArr[i].create((int) p.getX() + 4, (int) p.getY());
           pbArr[i].setDy(-10);
           pbArr[i].activate();
@@ -292,7 +300,7 @@ public class Screen extends JPanel implements ActionListener {
      * Once they're out of sight, they stop moving and become inactive.
      */
     for (int i = 0; i < pbArr.length; i++) {
-      if (pbArr[i].activeCheck()){
+      if (pbArr[i].status()){
         pbArr[i].tick();
         if (pbArr[i].getY() <= -10) {
           pbArr[i].deactivate();
@@ -309,9 +317,9 @@ public class Screen extends JPanel implements ActionListener {
      */
     for (int i = 0; i < en.length; i++) {
       for (int j = 0; j < pbArr.length; j++) {
-        if ((en[i].aliveCheck() == true) // Check to see if the enemy in the enemyArray is alive first of all. Shaves off some iterations
+        if ((en[i].status() == true) // Check to see if the enemy in the enemyArray is alive first of all. Shaves off some iterations
             &&
-            pbArr[j].activeCheck() // Check to see if the bullet is active or not. Also helps to shave off some iterations
+            pbArr[j].status() // Check to see if the bullet is active or not. Also helps to shave off some iterations
             && // All of this other garbage is basically just checking if the bullet and the enemy overlap in the 2d space
             pbArr[j].getX() + 3 >= en[i].getX() 
             &&
@@ -341,7 +349,7 @@ public class Screen extends JPanel implements ActionListener {
     for (int j = 0; j < en.length; j++) {
       if (!p.hasIFrames()
           &&
-          en[j].aliveCheck() == true // Check to see if the enemy in the enemyArray is alive first of all. Shaves off some iterations
+          en[j].status() == true // Check to see if the enemy in the enemyArray is alive first of all. Shaves off some iterations
           &&
           p.getX() + 9 >= en[j].getX() + 2 
           &&
@@ -364,7 +372,7 @@ public class Screen extends JPanel implements ActionListener {
       }
     }
 
-      if (en[i].aliveCheck()) {
+      if (en[i].status()) {
         en[i].tick();
       }
     }
@@ -381,13 +389,13 @@ public class Screen extends JPanel implements ActionListener {
 
     g.setColor(Color.blue);
     for (int i = 0; i < pbArr.length; i++) {
-      if (pbArr[i].activeCheck()){
+      if (pbArr[i].status()){
         pbArr[i].draw(g);
       }
     }
 
     for (int i = 0; i < en.length; i++) {
-      if (en[i].aliveCheck()) {
+      if (en[i].status()) {
         en[i].draw(g);
       }
     }
